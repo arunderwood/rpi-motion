@@ -3,6 +3,9 @@
 SCRIPT=$(realpath -s "$0")
 SCRIPTDIR=$(dirname "$SCRIPT")
 
+bold=$(tput bold)
+normal=$(tput sgr0)
+
 assert () {
     echo "$1"
     read -r ReadInput
@@ -46,7 +49,7 @@ else
     RPi3=false
 fi
 
-assert "Current hostname: $(/usr/bin/raspi-config nonint get_hostname) Do you want to set a new hostname ? (Y/n) "
+assert "Current hostname is ${bold}$(/usr/bin/raspi-config nonint get_hostname)${normal} Do you want to set a new hostname? (Y/n) "
 if [ $? == 1 ]; then
     read -r -p 'Hostname: ' NEWHOSTNAME
     echo "Setting the hostname..."
@@ -65,20 +68,20 @@ fi
 
 ##-------------------------------------------------------------------------------------------------
 
-if /usr/bin/raspi-config nonint get_can_expand ; then
+if /usr/bin/raspi-config nonint get_can_expand > /dev/null ; then
     echo 'Expanding root fs...'
-    /usr/bin/raspi-config nonint do_expand_rootfs
+    /usr/bin/raspi-config nonint do_expand_rootfs > /dev/null
 else
     echo 'Rootfs is already expanded - skipping...'
 fi
 
 ##-------------------------------------------------------------------------------------------------
 
-if /usr/bin/raspi-config nonint get_camera ; then
+if /usr/bin/raspi-config nonint get_camera > /dev/null ; then
     echo 'Camera is already enabled - skipping...'
 else
     echo 'Enabling RPi Camera...'
-    /usr/bin/raspi-config nonint do_camera
+    /usr/bin/raspi-config nonint do_camera > /dev/null
 fi
 
 ##-------------------------------------------------------------------------------------------------
