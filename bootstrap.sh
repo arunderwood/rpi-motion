@@ -46,12 +46,11 @@ else
     RPi3=false
 fi
 
-assert 'Do you want to set the hostname ? (Y/n) '
+assert "Current hostname: $(/usr/bin/raspi-config nonint get_hostname) Do you want to set a new hostname ? (Y/n) "
 if [ $? == 1 ]; then
     read -r -p 'Hostname: ' NEWHOSTNAME
     echo "Setting the hostname..."
-    sed -i "s/.*/$NEWHOSTNAME/g" /etc/hostname
-    sed -i "s/127.0.1.1.*/127.0.1.1\t$NEWHOSTNAME/g" /etc/hosts
+    raspi-config nonint do_hostname "$NEWHOSTNAME"
 else
     echo "Skipping setting the hostname..."
 fi
@@ -66,22 +65,20 @@ fi
 
 ##-------------------------------------------------------------------------------------------------
 
-source /usr/bin/raspi-config
-
-if /usr/bin/raspi-config get_can_expand ; then
+if /usr/bin/raspi-config nonint get_can_expand ; then
     echo 'Expanding root fs...'
-    /usr/bin/raspi-config do_expand_rootfs
+    /usr/bin/raspi-config nonint do_expand_rootfs
 else
     echo 'Rootfs is already expanded - skipping...'
 fi
 
 ##-------------------------------------------------------------------------------------------------
 
-if /usr/bin/raspi-config get_camera ; then
+if /usr/bin/raspi-config nonint get_camera ; then
     echo 'Camera is already enabled - skipping...'
 else
     echo 'Enabling RPi Camera...'
-    /usr/bin/raspi-config do_camera
+    /usr/bin/raspi-config nonint do_camera
 fi
 
 ##-------------------------------------------------------------------------------------------------
