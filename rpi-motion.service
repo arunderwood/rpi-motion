@@ -7,7 +7,7 @@ After=docker.service
 Restart=always
 ExecStartPre=/usr/bin/docker pull arunderwood/rpi-motion
 ExecStart=/usr/bin/docker run --name=rpi-motion \
-    -p 8081:8081
+    -p 8081:8081 \
     -e TZ=America/Chicago \
     --device=/dev/video0:/dev/video0 \
     arunderwood/rpi-motion
