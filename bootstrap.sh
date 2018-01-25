@@ -37,10 +37,12 @@ CURRENT_USER=$(who am i | awk '{print $1}')
 RpiCPU=$(/bin/grep Revision /proc/cpuinfo | /usr/bin/cut -d ':' -f 2 | /bin/sed -e "s/ //g")
 if [ "$RpiCPU" == "a02082" ]; then
     echo "RapberryPi 3 detected"
+    echo
     RPi3=true
 else
     # RaspberryPi 2 or 1... let's say it's 2...
     echo "RapberryPi 2 detected"
+    echo
     RPi3=false
 fi
 
@@ -70,16 +72,15 @@ apt-get -qq dist-upgrade
 
 ##-------------------------------------------------------------------------------------------------
 
-echo 'Installing Docker...'
-
 if ! docker run hello-world ; then
+    echo 'Installing Docker...'
     curl -sSL https://get.docker.com | sh
 else
-    echo "Docker is already installed and working..."
+    echo "Docker is already installed - skipping..."
 fi
 
 if groups "$CURRENT_USER" | grep &>/dev/null '\bdocker\b'; then
-    echo "$CURRENT_USER is already a member of the docker group"
+    echo "$CURRENT_USER is already a member of the docker group - skipping..."
 else
     echo "Adding user $CURRENT_USER to the docker group"
     usermod -aG docker "$CURRENT_USER"
@@ -87,21 +88,19 @@ fi
 
 ##-------------------------------------------------------------------------------------------------
 
-echo 'Setup loading of bcm2835-v4l2 at boot time...'
-
 if grep -q 'enable_uart=1' /etc/modules; then
     echo 'bcm2835-v4l2 is already enabled - skipping'
 else
-    echo 'bcm2835-v4l2' | tee -a /etc/modules
+    echo 'Setup loading of bcm2835-v4l2 at boot time...'
+    echo 'bcm2835-v4l2' >> /etc/modules
 fi
 
 ##-------------------------------------------------------------------------------------------------
 
-echo 'Installing rpi-motion.service...'
-
 if [ -f /etc/systemd/system/rpi-motion.service ]; then
     echo 'rpi-motion.service is already installed - skipping'
 else
+    echo 'Installing rpi-motion.service...'
     cp rpi-motion.service /etc/systemd/system/
     systemctl daemon-reload
     systemctl enable rpi-motion.service
