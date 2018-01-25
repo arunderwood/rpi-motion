@@ -56,6 +56,5 @@ network={
   ```
   git clone https://github.com/arunderwood/rpi-motion.git
   cd rpi-motion
-  sudo chmod +x bootstrap.sh
   sudo ./bootstrap.sh
   ```

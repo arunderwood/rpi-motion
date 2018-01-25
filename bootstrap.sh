@@ -31,6 +31,8 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+CURRENT_USER=$(who am i | awk '{print $1}')
+
 ## Detecting Pi model
 RpiCPU=$(/bin/grep Revision /proc/cpuinfo | /usr/bin/cut -d ':' -f 2 | /bin/sed -e "s/ //g")
 if [ "$RpiCPU" == "a02082" ]; then
@@ -70,8 +72,18 @@ apt-get -qq dist-upgrade
 
 echo 'Installing Docker...'
 
-curl -sSL https://get.docker.com | sh
-usermod -aG docker $(who am i | awk '{print $1}')
+if ! docker run hello-world ; then
+    curl -sSL https://get.docker.com | sh
+else
+    echo "Docker is already installed and working..."
+fi
+
+if groups "$CURRENT_USER" | grep &>/dev/null '\bdocker\b'; then
+    echo "$CURRENT_USER is already a member of the docker group"
+else
+    echo "Adding user $CURRENT_USER to the docker group"
+    usermod -aG docker "$CURRENT_USER"
+fi
 
 ##-------------------------------------------------------------------------------------------------
 
