@@ -72,7 +72,7 @@ apt-get -qq dist-upgrade
 
 ##-------------------------------------------------------------------------------------------------
 
-if ! docker run hello-world ; then
+if ! docker run hello-world > /dev/null ; then
     echo 'Installing Docker...'
     curl -sSL https://get.docker.com | sh
 else
