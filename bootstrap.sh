@@ -71,6 +71,7 @@ apt-get -qq dist-upgrade
 echo 'Installing Docker...'
 
 curl -sSL https://get.docker.com | sh
+usermod -aG docker $(who am i | awk '{print $1}')
 
 ##-------------------------------------------------------------------------------------------------
 
@@ -79,7 +80,7 @@ echo 'Setup loading of bcm2835-v4l2 at boot time...'
 if grep -q 'enable_uart=1' /etc/modules; then
     echo 'bcm2835-v4l2 is already enabled - skipping'
 else
-    echo 'bcm2835-v4l2' | sudo tee -a /etc/modules
+    echo 'bcm2835-v4l2' | tee -a /etc/modules
 fi
 
 ##-------------------------------------------------------------------------------------------------
@@ -90,8 +91,8 @@ if [ -f /etc/systemd/system/rpi-motion.service ]; then
     echo 'rpi-motion.service is already installed - skipping'
 else
     cp rpi-motion.service /etc/systemd/system/
-    sudo systemctl daemon-reload
-    sudo systemctl enable rpi-motion.service
+    systemctl daemon-reload
+    systemctl enable rpi-motion.service
 fi
 
 ##-------------------------------------------------------------------------------------------------
