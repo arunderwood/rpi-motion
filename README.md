@@ -6,12 +6,6 @@
 
 This runs a motion-detecting camera connected to a Raspberry Pi. The videos are saved into a folder on the host machine (i.e. outside of the Docker container), and can be streamed over the network too.
 
-
-## Building the image
-
-    docker build . -t arunderwood/rpi-motion
-
-
 ## Running
 
 If you're happy with the defaults, you can pull the latest docker image and run it:
@@ -26,11 +20,11 @@ This will connect to a webcam via `/dev/video0` and start running as a docker da
 
 * Mount the *Boot* volume of the SD card
 
-  Create a file named `wpa_supplicant.conf`
+  * Create a file named `wpa_supplicant.conf`
 
-  Paste this into the .conf file and fill in your network details
+  * Paste this into the .conf file and fill in your network details
 
-```
+  ```
 country=US
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
@@ -39,9 +33,9 @@ network={
     ssid="<your network name>"
     psk="<your password>"
 }
-```
+  ```
 
-  Create an empty file named `ssh` to enable SSH
+  * Create an empty file named `ssh` to enable SSH
 
 * Plug the SD card into your Pi and power on
 
