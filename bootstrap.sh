@@ -64,6 +64,28 @@ else
     exit 0
 fi
 
+##-------------------------------------------------------------------------------------------------
+
+source /usr/bin/raspi-config
+
+if /usr/bin/raspi-config get_can_expand ; then
+    echo 'Expanding root fs...'
+    /usr/bin/raspi-config do_expand_rootfs
+else
+    echo 'Rootfs is already expanded - skipping...'
+fi
+
+##-------------------------------------------------------------------------------------------------
+
+if /usr/bin/raspi-config get_camera ; then
+    echo 'Camera is already enabled - skipping...'
+else
+    echo 'Enabling RPi Camera...'
+    /usr/bin/raspi-config do_camera
+fi
+
+##-------------------------------------------------------------------------------------------------
+
 echo 'Performing a system update...'
 
 apt-get -qq update
@@ -84,15 +106,6 @@ if groups "$CURRENT_USER" | grep &>/dev/null '\bdocker\b'; then
 else
     echo "Adding user $CURRENT_USER to the docker group"
     usermod -aG docker "$CURRENT_USER"
-fi
-
-##-------------------------------------------------------------------------------------------------
-
-if grep -q 'enable_uart=1' /etc/modules; then
-    echo 'bcm2835-v4l2 is already enabled - skipping'
-else
-    echo 'Setup loading of bcm2835-v4l2 at boot time...'
-    echo 'bcm2835-v4l2' >> /etc/modules
 fi
 
 ##-------------------------------------------------------------------------------------------------
