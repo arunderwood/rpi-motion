@@ -53,8 +53,8 @@ network={
 
 * Clone this repo and run the bootstrap script
 
-  ```
+```
   git clone https://github.com/arunderwood/rpi-motion.git
   cd rpi-motion
   sudo ./bootstrap.sh
-  ```
+```
