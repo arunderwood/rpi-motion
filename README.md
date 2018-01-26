@@ -24,7 +24,7 @@ This will connect to a webcam via `/dev/video0` and start running as a docker da
 
   * Paste this into the .conf file and fill in your network details
 
-  ```
+```
 country=US
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
@@ -33,7 +33,7 @@ network={
     ssid="<your network name>"
     psk="<your password>"
 }
-  ```
+```
 
   * Create an empty file named `ssh` to enable SSH
 
@@ -54,7 +54,7 @@ network={
 * Clone this repo and run the bootstrap script
 
 ```
-  git clone https://github.com/arunderwood/rpi-motion.git
-  cd rpi-motion
-  sudo ./bootstrap.sh
+git clone https://github.com/arunderwood/rpi-motion.git
+cd rpi-motion
+sudo ./bootstrap.sh
 ```
