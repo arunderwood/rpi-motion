@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# Config
+##-------------------------------------------------------------------------------------------------
+# How many MB of RAM should the GPU be able to use?
+GPU_MEM=16
+
+##-------------------------------------------------------------------------------------------------
+
 SCRIPT=$(realpath -s "$0")
 SCRIPTDIR=$(dirname "$SCRIPT")
 
@@ -82,6 +89,15 @@ if /usr/bin/raspi-config nonint get_camera > /dev/null ; then
 else
     echo 'Enabling RPi Camera...'
     /usr/bin/raspi-config nonint do_camera > /dev/null
+fi
+
+##-------------------------------------------------------------------------------------------------
+
+if [[ "$(/usr/bin/raspi-config nonint get_config_var gpu_mem /boot/config.txt)" != "$GPU_MEM" ]] ; then
+    echo "GPU memory is already set to $GPU_MEM - skipping..."
+else
+    echo "Setting GPU Mem to $GPU_MEM..."
+    /usr/bin/raspi-config nonint do_memory_split "$GPU_MEM" > /dev/null
 fi
 
 ##-------------------------------------------------------------------------------------------------
